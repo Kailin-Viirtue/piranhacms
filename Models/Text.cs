@@ -5,10 +5,10 @@ using Piranha.Extend;
 
 namespace piranhacms.Models
 {
-    [PageType(Title = "Raw Text")]
-    public class Text
+    [PageType(Title = "Release Notes", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
+    public class Text : Page<StandardPage>
     {
-        [Field]
-        public StringField Data { get; set; }
+        [Region]
+        public HtmlField Body { get; set; }
     }
 }
