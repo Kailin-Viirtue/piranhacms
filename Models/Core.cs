@@ -28,14 +28,12 @@ namespace Models
     public class MarketingMaterial
     {
         public string Title;
-        public string PageLength;
-        public string Format;
+        public string Description;
         public string DownloadLink;
         public string ThumbnailLink;
-        public MarketingMaterial(string title, string pageLength, string format, string downloadLink, string thumbnailLink) {
+        public MarketingMaterial(string title, string description, string downloadLink, string thumbnailLink) {
             Title = title;
-            PageLength = pageLength;
-            Format = format;
+            Description = description;
             DownloadLink = downloadLink;
             ThumbnailLink = thumbnailLink;
         }

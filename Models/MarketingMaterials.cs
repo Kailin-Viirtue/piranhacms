@@ -15,8 +15,7 @@ namespace piranhacms.Models
     public class MarketingMaterialBlock : Block
     {
         public StringField Title { get; set; }
-        public NumberField PageLength { get; set; }
-        public StringField Format { get; set; }
+        public TextField Description { get; set; }
         public ImageField Thumbnail { get; set; }
         public MediaField Media { get; set; }
     }
