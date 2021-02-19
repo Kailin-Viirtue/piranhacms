@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Piranha;
 using Piranha.AttributeBuilder;
-using Piranha.AspNetCore.Identity.SQLite;
-using Piranha.Data.EF.SQLite;
+using Piranha.AspNetCore.Identity.PostgreSQL;
+using Piranha.Data.EF.PostgreSql;
 using Piranha.Manager.Editor;
 using piranhacms.Models;
 
@@ -40,10 +40,10 @@ namespace piranhacms
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
-                options.UseEF<SQLiteDb>(db =>
-                    db.UseSqlite(_config.GetConnectionString("piranha")));
-                options.UseIdentityWithSeed<IdentitySQLiteDb>(db =>
-                    db.UseSqlite(_config.GetConnectionString("piranha")));
+                options.UseEF<PostgreSqlDb>(db =>
+                    db.UseNpgsql(_config.GetConnectionString("piranha")));
+                options.UseIdentityWithSeed<IdentityPostgreSQLDb>(db =>
+                    db.UseNpgsql(_config.GetConnectionString("piranha")));
 
                 /***
                  * Here you can configure the different permissions
