@@ -19,4 +19,5 @@ namespace piranhacms.Models
         [Field(Title = "Notes")]
         public HtmlField Notes { get; set; }
     }
+
 }

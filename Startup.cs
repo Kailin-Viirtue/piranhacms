@@ -9,6 +9,7 @@ using Piranha.AttributeBuilder;
 using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.Data.EF.SQLite;
 using Piranha.Manager.Editor;
+using piranhacms.Models;
 
 namespace piranhacms
 {
@@ -66,6 +67,9 @@ namespace piranhacms
 
             // Initialize Piranha
             App.Init(api);
+
+            // Register Blocks
+            App.Blocks.Register<MarketingMaterialBlock>();
 
             // Build content types
             new ContentTypeBuilder(api)

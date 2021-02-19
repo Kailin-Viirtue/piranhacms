@@ -9,12 +9,12 @@ using piranhacms.Models;
 
 namespace piranhacms.Controllers
 {
-    [Route("api/release-notes")]
-    public class ReleaseNotesController : Controller
+    [Route("api/marketing-materials")]
+    public class MarketingMaterialsController : Controller
     {
         private readonly IApi _api;
         
-        public ReleaseNotesController(IApi api)
+        public MarketingMaterialsController(IApi api)
         {
             _api = api;
         }
@@ -57,16 +57,8 @@ namespace piranhacms.Controllers
         [Route("test")]
         public async Task<IActionResult> GetTest()
         {
-            var releaseNotesPages = new List<DynamicPage>();
             var allPages = await _api.Pages.GetAllAsync();
-
-            foreach(DynamicPage page in allPages) {
-                if(page.TypeId == "ReleaseNotesPage") {
-                    releaseNotesPages.Add(page);
-                }
-            }
-
-            return Ok(releaseNotesPages);
+            return Ok(allPages);
         }
     }
 }

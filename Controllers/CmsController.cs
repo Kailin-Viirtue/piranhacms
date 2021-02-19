@@ -63,7 +63,12 @@ namespace piranhacms.Controllers
             {
                 var model = await _loader.GetPageAsync<StandardPage>(id, HttpContext.User, draft);
 
-                return View(model.TypeId, model);
+                string pageType = "StandardPage";
+                string[] typesWithPages = {"ReleasesPage", "ReleaseNotesPage"};
+                if(Array.Exists(typesWithPages, element => element == model.TypeId)) {
+                    pageType = model.TypeId;
+                }
+                return View(pageType, model);
             }
             catch (UnauthorizedAccessException)
             {

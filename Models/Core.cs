@@ -24,4 +24,21 @@ namespace Models
             Notes = notes;
         }
     }
+
+    public class MarketingMaterial
+    {
+        public string Title;
+        public string PageLength;
+        public string Format;
+        public string DownloadLink;
+        public string ThumbnailLink;
+        public MarketingMaterial(string title, string pageLength, string format, string downloadLink, string thumbnailLink) {
+            Title = title;
+            PageLength = pageLength;
+            Format = format;
+            DownloadLink = downloadLink;
+            ThumbnailLink = thumbnailLink;
+        }
+    }
+
 }
