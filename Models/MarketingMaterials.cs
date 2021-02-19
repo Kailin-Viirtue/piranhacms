@@ -17,6 +17,12 @@ namespace piranhacms.Models
         public StringField Title { get; set; }
         public TextField Description { get; set; }
         public ImageField Thumbnail { get; set; }
+        [Field(Placeholder = "Optional")]
         public MediaField Media { get; set; }
+        [Field(Title = "External URL?", Placeholder = "This media is a link to an external URL")]
+        public CheckBoxField IsExternalUrl { get; set; }
+        [Field(Title = "External URL", Placeholder = "Optional")]
+        public StringField ExternalUrl { get; set; }
     }
 }
+

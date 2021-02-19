@@ -22,43 +22,36 @@ namespace piranhacms.Controllers
         [Route("")]
         public async Task<IActionResult> GetAll()
         {
-            var releasesPage = await _api.Pages.GetBySlugAsync("releases");
-            string currentVersion = releasesPage.Regions.CurrentVersion.Value;
+            var marketingMaterialsPage = await _api.Pages.GetBySlugAsync("marketing-materials");
 
-            var sitemap = await _api.Sites.GetSitemapAsync();
-            var releasesPartialMap = sitemap.GetPartial(releasesPage.Id);
+            List<MarketingMaterialDTO> marketingMaterials = new List<MarketingMaterialDTO>();
 
-            ReleaseNotes currentRelease = null;
-            List<ReleaseNotes> releaseNoteses = new List<ReleaseNotes>();
-
-            foreach(SitemapItem subpage in releasesPartialMap) {
-                var page = await _api.Pages.GetByIdAsync(subpage.Id);
-                ReleaseNotes releaseNotes = new ReleaseNotes(
-                    page.Title,
-                    (DateTime) page.Regions.ReleaseNotesBody.ReleaseDate.Value,
-                    page.Regions.ReleaseNotesBody.Notes.Value
+            foreach(MarketingMaterialBlock block in marketingMaterialsPage.Blocks) {
+                string mediaUrl;
+                if(!block.IsExternalUrl.Value && block.Media.HasValue) {
+                    mediaUrl = block.Media.Media.PublicUrl;
+                }
+                else {
+                    mediaUrl = block.ExternalUrl.Value;
+                }
+                MarketingMaterialDTO marketingMaterial = new MarketingMaterialDTO(
+                    block.Title,
+                    block.Description,
+                    mediaUrl,
+                    block.Thumbnail.Media.PublicUrl
                 );
 
-                releaseNoteses.Add(releaseNotes);
-
-                if(releaseNotes.Version == currentVersion) {
-                    currentRelease = releaseNotes;
-                }
+                marketingMaterials.Add(marketingMaterial);
             }
 
-            Releases releases = new Releases(
-                currentRelease,
-                releaseNoteses
-            );
-
-            return Json(releases);
+            return Json(marketingMaterials);
         }
 
         [Route("test")]
         public async Task<IActionResult> GetTest()
         {
-            var allPages = await _api.Pages.GetAllAsync();
-            return Ok(allPages);
+            var marketingMaterialsPage = await _api.Pages.GetBySlugAsync("marketing-materials");
+            return Ok(marketingMaterialsPage);
         }
     }
 }

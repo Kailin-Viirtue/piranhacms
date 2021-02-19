@@ -28,12 +28,12 @@ namespace piranhacms.Controllers
             var sitemap = await _api.Sites.GetSitemapAsync();
             var releasesPartialMap = sitemap.GetPartial(releasesPage.Id);
 
-            ReleaseNotes currentRelease = null;
-            List<ReleaseNotes> releaseNoteses = new List<ReleaseNotes>();
+            ReleaseNotesDTO currentRelease = null;
+            List<ReleaseNotesDTO> releaseNoteses = new List<ReleaseNotesDTO>();
 
             foreach(SitemapItem subpage in releasesPartialMap) {
                 var page = await _api.Pages.GetByIdAsync(subpage.Id);
-                ReleaseNotes releaseNotes = new ReleaseNotes(
+                ReleaseNotesDTO releaseNotes = new ReleaseNotesDTO(
                     page.Title,
                     (DateTime) page.Regions.ReleaseNotesBody.ReleaseDate.Value,
                     page.Regions.ReleaseNotesBody.Notes.Value
@@ -46,7 +46,7 @@ namespace piranhacms.Controllers
                 }
             }
 
-            Releases releases = new Releases(
+            ReleasesDTO releases = new ReleasesDTO(
                 currentRelease,
                 releaseNoteses
             );
