@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Models;
 using Piranha;
 using Piranha.Models;
+using piranhacms.Models;
 
 namespace piranhacms.Controllers
 {
@@ -42,24 +43,36 @@ namespace piranhacms.Controllers
         [Route("")]
         public async Task<IActionResult> GetAll()
         {
-            var releaseNotesParent = await _api.Pages.GetBySlugAsync("release-notes");
-            var releaseNotesPages = new List<System.Object>();
+            var releasesPage = await _api.Pages.GetBySlugAsync("releases");
+            string currentVersion = releasesPage.Regions.CurrentVersion.Value;
 
             var sitemap = await _api.Sites.GetSitemapAsync();
-            var releaseNotesPartialMap = sitemap.GetPartial(releaseNotesParent.Id);
+            var releasesPartialMap = sitemap.GetPartial(releasesPage.Id);
 
-            foreach(SitemapItem subpage in releaseNotesPartialMap) {
+            ReleaseNotes currentRelease = null;
+            List<ReleaseNotes> releaseNoteses = new List<ReleaseNotes>();
+
+            foreach(SitemapItem subpage in releasesPartialMap) {
                 var page = await _api.Pages.GetByIdAsync(subpage.Id);
+                ReleaseNotes releaseNotes = new ReleaseNotes(
+                    page.Title,
+                    (DateTime) page.Regions.ReleaseNotesBody.ReleaseDate.Value,
+                    page.Regions.ReleaseNotesBody.Notes.Value
+                );
 
-                var noteJson = new {
-                    version = page.Title,
-                    releaseDate = page.Created,
-                    notes = page.Regions.Body.Value
-                };
-                releaseNotesPages.Add(noteJson);
+                releaseNoteses.Add(releaseNotes);
+
+                if(releaseNotes.Version == currentVersion) {
+                    currentRelease = releaseNotes;
+                }
             }
 
-            return Json(releaseNotesPages);
+            Releases releases = new Releases(
+                currentRelease,
+                releaseNoteses
+            );
+
+            return Json(releases);
         }
 
         [Route("test")]
@@ -69,7 +82,7 @@ namespace piranhacms.Controllers
             var allPages = await _api.Pages.GetAllAsync();
 
             foreach(DynamicPage page in allPages) {
-                if(page.TypeId == "Text") {
+                if(page.TypeId == "ReleaseNotesPage") {
                     releaseNotesPages.Add(page);
                 }
             }
